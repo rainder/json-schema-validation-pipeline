@@ -9,7 +9,7 @@ var Validator = require('./../lib/validation');
 
 function validate(object, pipeline) {
   var validator = new Validator(pipeline);
-  validator.apply(object);
+  validator.validate(object);
   return validator.errors;
 }
 
@@ -104,6 +104,33 @@ describe('$schema', function () {
     validate(o, [
       {$schema: {
         name: String.regexp(/hello^/)
+      }}
+    ]).should.be.length(1);
+
+  });
+
+  it('Boolean', function () {
+
+    validate({
+      yes: true
+    }, [
+      {$schema: {
+        yes: Boolean
+      }}
+    ]).should.be.length(0);
+
+    validate({
+    }, [
+      {$schema: {
+        yes: Boolean.required()
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      yes: 'true'
+    }, [
+      {$schema: {
+        yes: Boolean
       }}
     ]).should.be.length(1);
 

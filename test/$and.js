@@ -9,7 +9,7 @@ var Validator = require('./../lib/validation');
 
 function validate(object, pipeline) {
   var validator = new Validator(pipeline);
-  validator.apply(object);
+  validator.validate(object);
   return validator.errors;
 }
 

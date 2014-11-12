@@ -1,9 +1,11 @@
 # Advanced JSON Schema Validator
 
-## Instalation
+## Installation
 ```bash
 $ npm install json-schema-validation-pipeline
 ```
+## Confession
+This package modifies global `String`, `Object`, `Array`, `Function`, `Number` and `Boolean` constructor properties. I feel bad about it. Realy.
 
 ## Example
 
@@ -63,10 +65,58 @@ console.log(validator.isValid); //outputs false
 console.log(validator.errors); //outputs [ '`address.post` depends on `address.city` field.' ]
 ```
 
+## Available pipeline methods
+
+### `$schema`
+Checks object for property types and values. 
+Accepts `Object(propertyPath: SchemaType)`.
+
+### `$or`
+Checks if one of properties is defined in the object. 
+Accepts `Array(String)`.
+
+### `$and`
+Checks if all properties are defined. 
+Accepts `Array(String)`.
+
+### `$dependency`
+Checks if all dependencies are met. 
+Accepts `Object(propertyPath: [String])`
+
+## Available SchemaTypes
+
+ * String
+ * Number
+ * Boolean
+ * Function
+ * Object
+ 
+## Schema Type Methods
+
+### `required()`
+Specifies that property is required in the JSON object.
+
+### `min(int)`
+Specifies minimal value of `Number` or minimal length of the `String`
+
+### `max(int)`
+Specifies maximal value of `Number` or maximal length of the `String`
+
+### `regexp(RegExp)`
+Specifies regexp validation pattern for the property
+
+### `oneOf(array)`
+Specifies the possible values for the property
+
+### `fn(Function)`
+Specifies custom validation function. Must return `true` if validation is successfull.
+
+
 ## Running tests
 ```bash
 $ npm test
+```
 
 ## License
 MIT
-```
+
