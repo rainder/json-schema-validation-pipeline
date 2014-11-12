@@ -1,0 +1,21 @@
+{
+  "name": "json-schema-validation-pipeline",
+  "version": "0.0.1",
+  "description": "Advanced JSON Schema Validator",
+  "main": "lib/validation.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Andrius Skerla",
+  "email": "andrius@skerla.com",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
+  },
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "object-path": "^0.6.0"
+  }
+}
