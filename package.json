@@ -14,6 +14,7 @@
     "mocha": "^2.0.1",
     "should": "^4.3.0"
   },
+  "repository": "https://github.com/rainder/json-schema-validation-pipeline",
   "dependencies": {
     "lodash": "^2.4.1",
     "object-path": "^0.6.0"
