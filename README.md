@@ -67,19 +67,19 @@ console.log(validator.errors); //outputs [ '`address.post` depends on `address.c
 
 ## Available pipeline methods
 
-### `$schema`
+#### `$schema`
 Checks object for property types and values. 
 Accepts `Object(propertyPath: SchemaType)`.
 
-### `$or`
+#### `$or`
 Checks if one of properties is defined in the object. 
 Accepts `Array(String)`.
 
-### `$and`
+#### `$and`
 Checks if all properties are defined. 
 Accepts `Array(String)`.
 
-### `$dependency`
+#### `$dependency`
 Checks if all dependencies are met. 
 Accepts `Object(propertyPath: [String])`
 
@@ -93,22 +93,22 @@ Accepts `Object(propertyPath: [String])`
  
 ## Schema Type Methods
 
-### `required()`
+#### `required()`
 Specifies that property is required in the JSON object.
 
-### `min(int)`
+#### `min(int)`
 Specifies minimal value of `Number` or minimal length of the `String`
 
-### `max(int)`
+#### `max(int)`
 Specifies maximal value of `Number` or maximal length of the `String`
 
-### `regexp(RegExp)`
+#### `regexp(RegExp)`
 Specifies regexp validation pattern for the property
 
-### `oneOf(array)`
+#### `oneOf(array)`
 Specifies the possible values for the property
 
-### `fn(Function)`
+#### `fn(Function)`
 Specifies custom validation function. Must return `true` if validation is successfull.
 
 
