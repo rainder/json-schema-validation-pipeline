@@ -85,36 +85,48 @@ Accepts `Object(propertyPath: [String])`
 
 ## Available SchemaTypes
 
- * String
-   * required
-   * min
-   * max
-   * regexp
-   * oneOf
-   * fn
-   * len
- * Number
-   * required
-   * min
-   * max
-   * oneOf
-   * fn
- * Boolean
-   * required
- * Function
-   * required
-   * fn
- * Object
-   * required
-   * fn
- * Array
-   * required
-   * min
-   * max
-   * fn
-   * len
-   * oneOf
-   * typeOf
+#### `String`
+Applicable methods:
+ * required
+ * len
+ * min
+ * max
+ * regexp
+ * oneOf
+ * fn
+ 
+#### `Number`
+Applicable methods:
+ * required
+ * min
+ * max
+ * oneOf
+ * fn
+
+#### `Boolean`
+Applicable methods:
+ * required
+ * fn
+
+#### `Function`
+Applicable methods:
+ * required
+ * fn
+
+#### `Object`
+Applicable methods:
+ * required
+ * fn
+ 
+#### `Array`
+Applicable methods:
+ * required
+ * len
+ * min
+ * max
+ * oneOf
+ * typeOf
+ * fn
  
 ## Schema Type Methods
 
