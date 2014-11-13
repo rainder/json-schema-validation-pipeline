@@ -76,7 +76,7 @@ Checks if one and only one of the properties is defined in the object.
 Accepts `Array(String)`.
 
 #### `$and`
-Checks if all properties are defined. 
+Checks if all or none of the properties are defined in the object.
 Accepts `Array(String)`.
 
 #### `$dependency`
