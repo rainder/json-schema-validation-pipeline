@@ -10,7 +10,7 @@ This package modifies global `String`, `Object`, `Array`, `Function`, `Number` a
 ## Example
 
 ```js
-var Validation = require('json-schema-validation-pipeline');
+var ValidationPipeline = require('json-schema-validation-pipeline');
 
 var objectToValidate = {
   id: 1,
@@ -27,7 +27,7 @@ var objectToValidate = {
 };
 
 
-var validator = new Validation([
+var validator = new ValidationPipeline([
 
   //property value check
   {$schema: {
