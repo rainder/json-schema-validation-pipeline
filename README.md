@@ -86,10 +86,35 @@ Accepts `Object(propertyPath: [String])`
 ## Available SchemaTypes
 
  * String
+   * required
+   * min
+   * max
+   * regexp
+   * oneOf
+   * fn
+   * len
  * Number
+   * required
+   * min
+   * max
+   * oneOf
+   * fn
  * Boolean
+   * required
  * Function
+   * required
+   * fn
  * Object
+   * required
+   * fn
+ * Array
+   * required
+   * min
+   * max
+   * fn
+   * len
+   * oneOf
+   * typeOf
  
 ## Schema Type Methods
 
@@ -102,14 +127,35 @@ Specifies minimal value of `Number` or minimal length of the `String`
 #### `max(int)`
 Specifies maximal value of `Number` or maximal length of the `String`
 
+#### `len(int)`
+Specifies the length of the string
+
 #### `regexp(RegExp)`
 Specifies regexp validation pattern for the property
 
 #### `oneOf(array)`
 Specifies the possible values for the property
 
-#### `fn(Function)`
+#### `fn(Function(value, key, object))`
 Specifies custom validation function. Must return `true` if validation is successfull.
+
+#### `typeOf(SchemaType)`
+Specifies the type on the element inside the array. 
+```
+
+var objectToValidate = {
+  values: [1, 2, 3, '4'],
+};
+
+var validator = new ValidationPipeline([
+  {$schema: {
+    values: Array.typeOf(Number.min(1))
+  }}
+]).validate(objectToValidate);
+
+// validator.errors == [ '`value.3` must be a number' ]
+
+```
 
 
 ## Running tests

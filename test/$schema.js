@@ -107,6 +107,18 @@ describe('$schema', function () {
       }}
     ]).should.be.length(1);
 
+    validate(o, [
+      {$schema: {
+        name: String.len(11)
+      }}
+    ]).should.be.length(0);
+
+    validate(o, [
+      {$schema: {
+        name: String.len(1)
+      }}
+    ]).should.be.length(1);
+
   });
 
   it('Boolean', function () {
@@ -131,6 +143,75 @@ describe('$schema', function () {
     }, [
       {$schema: {
         yes: Boolean
+      }}
+    ]).should.be.length(1);
+
+  });
+
+  it.only('Array', function () {
+
+    validate({
+      value: []
+    }, [
+      {$schema: {
+        value: Array.min(0)
+      }}
+    ]).should.be.length(0);
+
+    validate({
+      value: [1]
+    }, [
+      {$schema: {
+        value: Array.min(1)
+      }}
+    ]).should.be.length(0);
+
+    validate({
+      value: [1, 2]
+    }, [
+      {$schema: {
+        value: Array.max(1)
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      value: [1, 2, 3]
+    }, [
+      {$schema: {
+        value: Array.len(1)
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      value: [1, 2, 3]
+    }, [
+      {$schema: {
+        value: Array.len(3).oneOf([1, 2])
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      value: [1, 2, 3]
+    }, [
+      {$schema: {
+        value: Array.typeOf(Number)
+      }}
+    ]).should.be.length(0);
+
+    validate({
+      value: ['1', '2', 3]
+    }, [
+      {$schema: {
+        value: Array.typeOf(String)
+      }}
+    ]).should.be.length(1);
+
+
+    validate({
+      value: [1, 2, 3, 0]
+    }, [
+      {$schema: {
+        value: Array.typeOf(Number.min(1))
       }}
     ]).should.be.length(1);
 
@@ -162,6 +243,20 @@ describe('$schema', function () {
         })
       }}
     ]).should.be.length(2);
+
+    var o = {
+      custom: [1, 2, 3, 4]
+    };
+    validate(o, [
+      {$schema: {
+        custom: Function.fn(function (value, key, object) {
+          this.should.be.instanceOf(Validator);
+          object.should.be.equal(o);
+          value.should.be.equal(o.custom);
+          return 'Not valid';
+        })
+      }}
+    ]).should.be.length(1);
 
   });
 
