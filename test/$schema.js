@@ -148,7 +148,7 @@ describe('$schema', function () {
 
   });
 
-  it.only('Array', function () {
+  it('Array', function () {
 
     validate({
       value: []
