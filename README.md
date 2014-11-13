@@ -72,7 +72,7 @@ Checks object for property types and values.
 Accepts `Object(propertyPath: SchemaType)`. By default all `SchemaTypes` are optional unless `.required()` is called.
 
 #### `$or`
-Checks if one and only one of the properties is defined in the object. 
+Checks if one and only one property is defined in the object. 
 Accepts `Array(String)`.
 
 #### `$and`
@@ -137,7 +137,7 @@ Specifies regexp validation pattern for the property
 Specifies the possible values for the property
 
 #### `fn(Function(value, key, object))`
-Specifies custom validation function. Must return `true` if validation is successfull.
+Specifies custom validation function. Must return `true` if validation is successful.
 
 #### `typeOf(SchemaType)`
 Specifies the type on the element inside the array. 
