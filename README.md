@@ -132,24 +132,76 @@ Applicable methods:
 
 #### `required()`
 Specifies that property is required in the JSON object.
+```js
+var objectToValidate = {
+  name: 'Andrius',
+};
+
+var validator = new ValidationPipeline([
+  {$schema: {
+    values: String.required();
+  }}
+]).validate(objectToValidate);
+
+// validator.isValid == true
+```
 
 #### `min(int)`
-Specifies minimal value of `Number` or minimal length of the `String`
+Specifies min value of `Number` or min length of the `String` or min length of an `Array`
+```js
+var objectToValidate = {
+  bid: 10,
+};
+
+var validator = new ValidationPipeline([
+  {$schema: {
+    bid: Number.min(10)
+  }}
+]).validate(objectToValidate);
+
+// validator.isValid == true
+```
 
 #### `max(int)`
-Specifies maximal value of `Number` or maximal length of the `String`
+Specifies max value of `Number` or max length of the `String` or max length of an `Array`
 
 #### `len(int)`
-Specifies the length of the string
+Specifies the length of the string or array
 
 #### `regexp(RegExp)`
 Specifies regexp validation pattern for the property
 
 #### `oneOf(array)`
 Specifies the possible values for the property
+```js
+var objectToValidate = {
+  vegetable: 'tomato',
+  fruits: ['apple', 'orange'],
+};
+
+var validator = new ValidationPipeline([
+  {$schema: {
+    vegetable: String.oneOf(['tomato', 'salad']),
+    fruits: Array.oneOf(['apple', 'orange'])
+  }}
+]).validate(objectToValidate);
+```
 
 #### `fn(Function(value, key, object))`
 Specifies custom validation function. Must return `true` if validation is successful.
+```js
+var objectToValidate = {
+  values: [1, 2, 3],
+};
+
+var validator = new ValidationPipeline([
+  {$schema: {
+    values: Function.fn(function (value) {
+      return value[0] === 1 ? true : 'firs element is not 1!';
+    })
+  }}
+]).validate(objectToValidate);
+```
 
 #### `typeOf(SchemaType)`
 Specifies the type on the element inside the array. 
