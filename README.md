@@ -128,10 +128,10 @@ Applicable methods:
  * typeOf
  * fn
  
-## Schema Type Methods
+## SchemaType Methods
 
 #### `required()`
-Specifies that property is required in the JSON object.
+Specifies that property is required in the JSON object
 ```js
 var objectToValidate = {
   name: 'Andrius',
@@ -139,7 +139,7 @@ var objectToValidate = {
 
 var validator = new ValidationPipeline([
   {$schema: {
-    values: String.required();
+    name: String.required();
   }}
 ]).validate(objectToValidate);
 
