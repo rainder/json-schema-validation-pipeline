@@ -141,8 +141,7 @@ Specifies custom validation function. Must return `true` if validation is succes
 
 #### `typeOf(SchemaType)`
 Specifies the type on the element inside the array. 
-```
-
+```js
 var objectToValidate = {
   values: [1, 2, 3, '4'],
 };
@@ -154,7 +153,6 @@ var validator = new ValidationPipeline([
 ]).validate(objectToValidate);
 
 // validator.errors == [ '`value.3` must be a number' ]
-
 ```
 
 
