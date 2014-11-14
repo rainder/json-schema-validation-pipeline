@@ -58,7 +58,7 @@ describe('$strict', function () {
     ]);
 
 
-    should(o).key(['name', 'address']); //should contain name property
+    should(o).key(['name', 'address']); //should contain name and address property
     should(o.address).key(['country']);
   });
 
