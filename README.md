@@ -1,11 +1,25 @@
 # Advanced JSON Schema Validator
 
+## Confession
+This package modifies global `String`, `Object`, `Array`, `Function`, `Number` and `Boolean` constructor properties. I feel bad about it. Really.
+
 ## Installation
 ```bash
 $ npm install json-schema-validation-pipeline
 ```
-## Confession
-This package modifies global `String`, `Object`, `Array`, `Function`, `Number` and `Boolean` constructor properties. I feel bad about it. Really.
+
+## Usage
+```js
+var ValidationPipeline = require('json-schema-validation-pipeline');
+
+var validate = ValidationPipeline(pipeline);
+
+var result = validate(object);
+
+result.isValid;
+result.errors;
+
+```
 
 ## Example
 
@@ -38,7 +52,7 @@ var validate = ValidationPipeline([
     'birthday': String,
     'role': String.oneOf(['Developer', 'Musician']),
     'email': Function.required().fn(function (value) {
-      return value === 'andrius@skerla.com'? true : 'This email is not mine';
+      return value === 'andrius@skerla.com'? undefined : 'This email is not mine';
     }),
     'address': Object,
     'address.country': String,
@@ -64,6 +78,38 @@ var validationResult = validate(objectToValidate);
 console.log(validationResult.isValid); // false
 console.log(validationResult.errors); // [ '`address.post` depends on `address.city` field.' ]
 ```
+
+## Advanced Example
+```js
+var result = validate({
+  o: {
+    a: [],
+    b: ['Skerla']
+  }
+}, {
+  o: Function.required().fn(function (object, keyPath) {
+    //keyPath is 'o' here
+  
+    function arrayCheck(array, keyPath) {
+      //keyPath is 'o.a' or 'o.b' here
+      
+      if (~array.indexOf('Skerla')) {
+        this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
+      }
+    }
+
+    //apply another pipeline for this object!
+    this.$schema(object, {
+      a: Array.required().fn(arrayCheck),
+      b: Array.required().typeOf(String).fn(arrayCheck)
+    });
+  })
+});
+
+// result.isValid === false
+// result.errors === [ 'Well, array at path `o.b` cannot contain string "Skerla".' ]
+```
+
 ## Interface
 
 `ValidationPipeline(pipeline) : ValidationFunction`
@@ -215,7 +261,7 @@ var validator = new ValidationPipeline([
 ```
 
 #### `fn(Function(value, key, object))`
-Specifies custom validation function. Must return `true` if validation is successful.
+Specifies custom validation function. Must not return a value if validation is successful.
 ```js
 var objectToValidate = {
   values: [1, 2, 3],
@@ -224,7 +270,7 @@ var objectToValidate = {
 var validator = new ValidationPipeline([
   {$schema: {
     values: Function.fn(function (value) {
-      return value[0] === 1 ? true : 'firs element is not 1!';
+      return value[0] === 1 ? undefined : 'firs element is not 1!';
     })
   }}
 ]).validate(objectToValidate);

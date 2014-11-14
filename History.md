@@ -1,3 +1,9 @@
+# 0.2.1 / 2014-11-14
+
+* added support for key paths in nested `Function` calls
+* Breaking changes:
+	* Function callbacks must NOT return truthy values upon successful validation
+
 # 0.2.0 / 2014-11-14
 
 * changed module interface

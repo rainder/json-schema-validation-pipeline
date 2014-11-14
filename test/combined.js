@@ -38,7 +38,7 @@ describe('combined', function () {
         address: Object,
         'address.country': String,
         'address.city': String,
-        custom: function (item) { return true; }
+        custom: function (item) { }
       }},
       {$or: [
         'id', '_id'

@@ -241,7 +241,7 @@ describe('$schema', function () {
     }, [
       {$schema: {
         custom: Function.required().fn(function (item) {
-          return item === arr ? true : 'Not the same!';
+          return item === arr ? undefined : 'Not the same!';
         })
       }}
     ]).should.be.length(0);
@@ -274,6 +274,45 @@ describe('$schema', function () {
 
   });
 
+  it('Object', function () {
+
+    validate({
+      o: {}
+    }, {
+      o: Object
+    }).should.be.length(0);
+
+    validate({
+      o: 4
+    }, {
+      o: Object
+    }).should.be.length(1);
+
+    validate({
+      o: {
+        a: [],
+        b: ['Skerla']
+      }
+    }, {
+      o: Function.required().fn(function (object, keyPath) {
+        should(keyPath).match(/^o$/);
+
+        function arrayCheck(array, keyPath) {
+          should(keyPath).match(/^o\.(a|b)$/);
+          if (~array.indexOf('Skerla')) {
+            this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
+          }
+        }
+
+        this.$schema(object, {
+          a: Array.required().fn(arrayCheck),
+          b: Array.required().typeOf(String).fn(arrayCheck)
+        });
+      })
+    }).should.be.length(1);
+
+  });
+
   it('Custom', function () {
 
     validate({
@@ -281,7 +320,7 @@ describe('$schema', function () {
     }, [
       {$schema: {
         custom: function (item) {
-          return item === 0 ? true : '`custom` should be zero';
+          return item === 0 ? undefined : '`custom` should be zero';
         }
       }}
     ]).should.be.length(1);
