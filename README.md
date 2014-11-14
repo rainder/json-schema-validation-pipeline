@@ -81,18 +81,13 @@ console.log(validationResult.errors); // [ '`address.post` depends on `address.c
 
 ## Advanced Example
 ```js
-var result = validate({
-  o: {
-    a: [],
-    b: ['Skerla']
-  }
-}, {
+var validate = ValidationPipeline({
   o: Function.required().fn(function (object, keyPath) {
     //keyPath is 'o' here
-  
+
     function arrayCheck(array, keyPath) {
       //keyPath is 'o.a' or 'o.b' here
-      
+
       if (~array.indexOf('Skerla')) {
         this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
       }
@@ -104,6 +99,13 @@ var result = validate({
       b: Array.required().typeOf(String).fn(arrayCheck)
     });
   })
+});
+
+var result = validate({
+  o: {
+    a: [],
+    b: ['Skerla']
+  }
 });
 
 // result.isValid === false
