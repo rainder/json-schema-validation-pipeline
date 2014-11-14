@@ -27,7 +27,7 @@ var objectToValidate = {
 };
 
 
-var validator = new ValidationPipeline([
+var validate = ValidationPipeline([
 
   //property value check
   {$schema: {
@@ -60,10 +60,33 @@ var validator = new ValidationPipeline([
   }}
 ]);
 
-validator.validate(objectToValidate);
-console.log(validator.isValid); //outputs false
-console.log(validator.errors); //outputs [ '`address.post` depends on `address.city` field.' ]
+var validationResult = validate(objectToValidate);
+console.log(validationResult.isValid); // false
+console.log(validationResult.errors); // [ '`address.post` depends on `address.city` field.' ]
 ```
+## Interface
+
+`ValidationPipeline(pipeline) : ValidationFunction`
+
+Package exports `Function` which accepts one argument validation pipeline `Array`. Pipeline argument can be `array` or `object`. If `object` is specified it is treated as `$schema` pipeline argument.
+
+```js
+ValidationPipeline({
+	name: String
+});
+
+//equals to
+
+ValidationPipeline([
+	{$schema: {
+		name: String
+	}}
+]);
+
+```
+
+`ValidationFunction` accepts one argument which must be target object for validation. Returns `object(errors: [], isValid: Boolean)`.
+
 
 ## Available pipeline methods
 
