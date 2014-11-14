@@ -1,3 +1,7 @@
+# 0.1.6 / 2014-11-14
+
+* added deep object watch support for `$strict` pipeline method
+
 # 0.1.4 / 2014-11-14
 
 * added support for `$strict` pipeline method

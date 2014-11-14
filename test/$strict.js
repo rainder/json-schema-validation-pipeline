@@ -21,18 +21,45 @@ describe('$strict', function () {
   it('should trim values', function () {
     var o = {
       name: 'Andrius',
-      surname: 'Skerla'
+      surname: 'Skerla',
+      age: 26
     };
 
     validate(o, [
       {$strict: true},
       {$schema: {
-        name: String
+        name: String,
+        age: 26
       }}
-    ]).should.be.length(0);
+    ]);
 
-    should(o).key('name'); //should contain name property
-    should(o).not.key('surname'); //should not contain surname property
+
+    should(o).key(['name', 'age']); //should contain name property
+  });
+
+
+  it('should trim values', function () {
+    var o = {
+      name: 'Andrius',
+      surname: 'Skerla',
+      address: {
+        country: 'UK',
+        city: 'London'
+      }
+    };
+
+    validate(o, [
+      {$strict: true},
+      {$schema: {
+        name: String,
+        address: Object,
+        'address.country': String
+      }}
+    ]);
+
+
+    should(o).key(['name', 'address']); //should contain name property
+    should(o.address).key(['country']);
   });
 
 });
