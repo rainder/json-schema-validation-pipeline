@@ -31,9 +31,8 @@ describe('$strict', function () {
       }}
     ]).should.be.length(0);
 
-    should(o).not.key('surname');
-    should(o).key('name');
-    console.log(o);
+    should(o).key('name'); //shoudl contain name property
+    should(o).not.key('surname'); //should not containe surname property
   });
 
 });
