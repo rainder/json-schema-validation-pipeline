@@ -71,6 +71,10 @@ console.log(validator.errors); //outputs [ '`address.post` depends on `address.c
 Checks object for property types and values. 
 Accepts `Object(propertyPath: SchemaType)`. By default all `SchemaTypes` are optional unless `.required()` is called.
 
+#### `$strict`
+Turns `$schema` validation strict mode on: removes all properties form an object that are not defined in the `$schema`.
+Accepts `true` or `false`. By default it is `false`.
+
 #### `$or`
 Checks if one and only one property is defined in the object. 
 Accepts `Array(String)`.

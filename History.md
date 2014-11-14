@@ -1,3 +1,7 @@
+# 0.1.4 / 2014-11-14
+
+* added support for `$strict` pipeline method
+
 # 0.1.3 / 2014-11-14
 
 * if no pipeline method is defined Validator uses `$schema`
