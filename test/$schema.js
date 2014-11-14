@@ -18,6 +18,14 @@ function validate(object, pipeline) {
  */
 describe('$schema', function () {
 
+  it('should run $schema by default if no pipeline method if defined', function () {
+    validate({
+      name: 'Andrius'
+    }, [{
+      name: String.required()
+    }]).should.be.length(0);
+  });
+
   it('Number', function () {
     var o = {
       id: 4,

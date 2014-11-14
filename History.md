@@ -1,3 +1,7 @@
+# 0.1.3 / 2014-11-14
+
+* if no pipeline method is defined Validator uses `$schema`
+
 # 0.1.0 / 2014-11-13
 
 * added support for `String.length()`
