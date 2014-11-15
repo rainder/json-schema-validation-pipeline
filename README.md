@@ -81,23 +81,25 @@ console.log(validationResult.errors); // [ '`address.post` depends on `address.c
 
 ## Advanced Example
 ```js
-var validate = ValidationPipeline({
-  o: Object.required().fn(function (object, keyPath) {
-    //apply another pipeline for this object!
-    return this.$schema(object, {
-      a: Array.required().fn(arrayCheck),
-      b: Array.required().typeOf(String).fn(arrayCheck)
-    });
+var validate = ValidationPipeline([
+  {$schema: {
+    o: Object.required().fn(function (object, keyPath) {
+      //apply another pipeline for this object!
+      return this.$schema(object, {
+        a: Array.required().fn(arrayCheck),
+        b: Array.required().typeOf(String).fn(arrayCheck)
+      });
 
-    function arrayCheck(array, keyPath) {
-      //keyPath will be 'o.a' or 'o.b' here
+      function arrayCheck(array, keyPath) {
+        //keyPath will be 'o.a' or 'o.b' here
 
-      if (~array.indexOf('Skerla')) {
-        this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
+        if (~array.indexOf('Skerla')) {
+          this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
+        }
       }
-    }
-  })
-});
+    })
+  }}
+]);
 
 var result = validate({
   o: {
