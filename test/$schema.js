@@ -5,6 +5,7 @@
 var chai = require('chai');
 var should = require('should');
 var Validator = require('./../');
+var expect = chai.expect;
 
 
 function validate(object, pipeline) {
@@ -288,14 +289,19 @@ describe('$schema', function () {
       o: Object
     }).should.be.length(1);
 
-    validate({
+    var errors = validate({
       o: {
         a: [],
         b: ['Skerla']
       }
     }, {
-      o: Function.required().fn(function (object, keyPath) {
+      o: Object.required().fn(function (object, keyPath) {
         should(keyPath).match(/^o$/);
+
+        return this.$schema(object, {
+          a: Array.required().fn(arrayCheck),
+          b: Array.required().typeOf(String).fn(arrayCheck)
+        });
 
         function arrayCheck(array, keyPath) {
           should(keyPath).match(/^o\.(a|b)$/);
@@ -303,14 +309,10 @@ describe('$schema', function () {
             this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
           }
         }
-
-        this.$schema(object, {
-          a: Array.required().fn(arrayCheck),
-          b: Array.required().typeOf(String).fn(arrayCheck)
-        });
       })
-    }).should.be.length(1);
+    });
 
+    expect(errors).to.contain('Well, array at path `o.b` cannot contain string "Skerla".');
   });
 
   it('Custom', function () {

@@ -1,3 +1,7 @@
+# 0.2.2 / 2014-11-15
+
+* added level support for `$strict` method
+
 # 0.2.1 / 2014-11-14
 
 * added support for key paths in nested `Function` calls

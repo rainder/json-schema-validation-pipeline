@@ -82,22 +82,20 @@ console.log(validationResult.errors); // [ '`address.post` depends on `address.c
 ## Advanced Example
 ```js
 var validate = ValidationPipeline({
-  o: Function.required().fn(function (object, keyPath) {
-    //keyPath is 'o' here
+  o: Object.required().fn(function (object, keyPath) {
+    //apply another pipeline for this object!
+    return this.$schema(object, {
+      a: Array.required().fn(arrayCheck),
+      b: Array.required().typeOf(String).fn(arrayCheck)
+    });
 
     function arrayCheck(array, keyPath) {
-      //keyPath is 'o.a' or 'o.b' here
+      //keyPath will be 'o.a' or 'o.b' here
 
       if (~array.indexOf('Skerla')) {
         this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
       }
     }
-
-    //apply another pipeline for this object!
-    this.$schema(object, {
-      a: Array.required().fn(arrayCheck),
-      b: Array.required().typeOf(String).fn(arrayCheck)
-    });
   })
 });
 
@@ -144,7 +142,35 @@ Accepts `Object(propertyPath: SchemaType)`. By default all `SchemaTypes` are opt
 
 #### `$strict`
 Turns `$schema` validation strict mode on: removes all properties form an object that are not defined in the `$schema`.
-Accepts `true` or `false`. By default it is `false`.
+Accepts `Boolean` or options `Object(enabled: Boolean, level: Number)`. Level parameter specifies how deep Object should be traversed.
+By default `$strict` mode is disabled.
+
+#### Advanced example
+```js
+var o = {
+  l1: {
+    l2: {
+      a: {},
+      b: {},
+      c: {}
+    },
+    k2: {}
+  },
+  u2: 7
+};
+ValidationPipeline([
+  {$strict: {enabled: true, level: 2}},
+  {$schema: {
+    l1: Object,
+    'l1.l2': Object
+  }}
+])(o);
+
+//`o.u2` and `o.l1.k2` are removed, but `a`, `b`, `c` in `o.l1.l2` are kept
+expect(o).keys('l1');
+expect(o.l1).keys('l2');
+expect(o.l1.l2).keys(['a', 'b', 'c']);
+```
 
 #### `$or`
 Checks if one and only one property is defined in the object. 
@@ -208,33 +234,30 @@ Applicable methods:
 #### `required()`
 Specifies that property is required in the JSON object
 ```js
-var objectToValidate = {
-  name: 'Andrius',
-};
 
-var validator = new ValidationPipeline([
+var result = ValidationPipeline([
   {$schema: {
     name: String.required();
   }}
-]).validate(objectToValidate);
+])({
+  name: 'Andrius',
+});
 
-// validator.isValid == true
+// result.isValid == true
 ```
 
 #### `min(int)`
 Specifies min value of `Number` or min length of the `String` or min length of an `Array`
 ```js
-var objectToValidate = {
-  bid: 10,
-};
-
-var validator = new ValidationPipeline([
+var result = ValidationPipeline([
   {$schema: {
     bid: Number.min(10)
   }}
-]).validate(objectToValidate);
+])({
+  bid: 10,
+});
 
-// validator.isValid == true
+// result.isValid == true
 ```
 
 #### `max(int)`
@@ -247,19 +270,17 @@ Specifies the length of the string or array
 Specifies regexp validation pattern for the property
 
 #### `oneOf(array)`
-Specifies the possible values for the property
+Specifies possible values for the property
 ```js
-var objectToValidate = {
-  vegetable: 'tomato',
-  fruits: ['apple', 'orange'],
-};
-
-var validator = new ValidationPipeline([
+ValidationPipeline([
   {$schema: {
     vegetable: String.oneOf(['tomato', 'salad']),
     fruits: Array.oneOf(['apple', 'orange'])
   }}
-]).validate(objectToValidate);
+])({
+  vegetable: 'tomato',
+  fruits: ['apple', 'orange'],
+});
 ```
 
 #### `fn(Function(value, key, object))`
@@ -269,13 +290,13 @@ var objectToValidate = {
   values: [1, 2, 3],
 };
 
-var validator = new ValidationPipeline([
+ValidationPipeline([
   {$schema: {
     values: Function.fn(function (value) {
       return value[0] === 1 ? undefined : 'firs element is not 1!';
     })
   }}
-]).validate(objectToValidate);
+])(objectToValidate);
 ```
 
 #### `typeOf(SchemaType)`
@@ -285,13 +306,13 @@ var objectToValidate = {
   values: [1, 2, 3, '4'],
 };
 
-var validator = new ValidationPipeline([
+var result = ValidationPipeline([
   {$schema: {
     values: Array.typeOf(Number.min(1))
   }}
-]).validate(objectToValidate);
+])(objectToValidate);
 
-// validator.errors == [ '`value.3` must be a number' ]
+// result.errors == [ '`value.3` must be a number' ]
 ```
 
 
