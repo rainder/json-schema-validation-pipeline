@@ -4,19 +4,35 @@
  */
 var chai = require('chai');
 var should = require('should');
-var Validator = require('./../lib/validation');
+var Validator = require('./../');
+var expect = chai.expect;
 
 
 function validate(object, pipeline) {
-  var validator = new Validator(pipeline);
-  validator.validate(object);
-  return validator.errors;
+  var validator = Validator(pipeline);
+  var result = validator(object);
+  return result.errors;
 }
 
 /**
  *
  */
 describe('$schema', function () {
+
+  it('should run $schema by default if no pipeline method if defined', function () {
+
+    Validator([
+      {$schema: {
+        name: String.required()
+      }}
+    ])({}).isValid.should.be.equal(false);
+
+    validate({
+      name: 'Andrius'
+    }, [{
+      name: String.required()
+    }]).should.be.length(0);
+  });
 
   it('Number', function () {
     var o = {
@@ -107,6 +123,18 @@ describe('$schema', function () {
       }}
     ]).should.be.length(1);
 
+    validate(o, [
+      {$schema: {
+        name: String.len(11)
+      }}
+    ]).should.be.length(0);
+
+    validate(o, [
+      {$schema: {
+        name: String.len(1)
+      }}
+    ]).should.be.length(1);
+
   });
 
   it('Boolean', function () {
@@ -136,6 +164,75 @@ describe('$schema', function () {
 
   });
 
+  it('Array', function () {
+
+    validate({
+      value: []
+    }, [
+      {$schema: {
+        value: Array.min(0)
+      }}
+    ]).should.be.length(0);
+
+    validate({
+      value: [1]
+    }, [
+      {$schema: {
+        value: Array.min(1)
+      }}
+    ]).should.be.length(0);
+
+    validate({
+      value: [1, 2]
+    }, [
+      {$schema: {
+        value: Array.max(1)
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      value: [1, 2, 3]
+    }, [
+      {$schema: {
+        value: Array.len(1)
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      value: [1, 2, 3]
+    }, [
+      {$schema: {
+        value: Array.len(3).oneOf([1, 2])
+      }}
+    ]).should.be.length(1);
+
+    validate({
+      value: [1, 2, 3]
+    }, [
+      {$schema: {
+        value: Array.typeOf(Number)
+      }}
+    ]).should.be.length(0);
+
+    validate({
+      value: ['1', '2', 3]
+    }, [
+      {$schema: {
+        value: Array.typeOf(String)
+      }}
+    ]).should.be.length(1);
+
+
+    validate({
+      value: [1, 2, 3, 0]
+    }, [
+      {$schema: {
+        value: Array.typeOf(Number.min(1))
+      }}
+    ]).should.be.length(1);
+
+  });
+
   it('Function', function () {
 
     var arr = [1, 2, 3, 4];
@@ -145,7 +242,7 @@ describe('$schema', function () {
     }, [
       {$schema: {
         custom: Function.required().fn(function (item) {
-          return item === arr ? true : 'Not the same!';
+          return item === arr ? undefined : 'Not the same!';
         })
       }}
     ]).should.be.length(0);
@@ -163,6 +260,59 @@ describe('$schema', function () {
       }}
     ]).should.be.length(2);
 
+    var o = {
+      custom: [1, 2, 3, 4]
+    };
+    validate(o, [
+      {$schema: {
+        custom: Function.fn(function (value, key, object) {
+          object.should.be.equal(o);
+          value.should.be.equal(o.custom);
+          return 'Not valid';
+        })
+      }}
+    ]).should.be.length(1);
+
+  });
+
+  it('Object', function () {
+
+    validate({
+      o: {}
+    }, {
+      o: Object
+    }).should.be.length(0);
+
+    validate({
+      o: 4
+    }, {
+      o: Object
+    }).should.be.length(1);
+
+    var errors = validate({
+      o: {
+        a: [],
+        b: ['Skerla']
+      }
+    }, {
+      o: Object.required().fn(function (object, keyPath) {
+        should(keyPath).match(/^o$/);
+
+        return this.$schema(object, {
+          a: Array.required().fn(arrayCheck),
+          b: Array.required().typeOf(String).fn(arrayCheck)
+        });
+
+        function arrayCheck(array, keyPath) {
+          should(keyPath).match(/^o\.(a|b)$/);
+          if (~array.indexOf('Skerla')) {
+            this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
+          }
+        }
+      })
+    });
+
+    expect(errors).to.contain('Well, array at path `o.b` cannot contain string "Skerla".');
   });
 
   it('Custom', function () {
@@ -172,7 +322,7 @@ describe('$schema', function () {
     }, [
       {$schema: {
         custom: function (item) {
-          return item === 0 ? true : '`custom` should be zero';
+          return item === 0 ? undefined : '`custom` should be zero';
         }
       }}
     ]).should.be.length(1);

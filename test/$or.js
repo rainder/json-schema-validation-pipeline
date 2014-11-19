@@ -4,13 +4,13 @@
  */
 var chai = require('chai');
 var should = require('should');
-var Validator = require('./../lib/validation');
+var Validator = require('./../');
 
 
 function validate(object, pipeline) {
-  var validator = new Validator(pipeline);
-  validator.validate(object);
-  return validator.errors;
+  var validator = Validator(pipeline);
+  var result = validator(object);
+  return result.errors;
 }
 
 
