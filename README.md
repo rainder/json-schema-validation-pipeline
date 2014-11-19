@@ -1,5 +1,7 @@
 # Advanced JSON Schema Validator
 
+Makes your life easier!
+
 ## Confession
 This package modifies global `String`, `Object`, `Array`, `Function`, `Number` and `Boolean` constructor properties. I feel bad about it. Really.
 
@@ -190,46 +192,52 @@ Accepts `Object(propertyPath: [String])`
 
 #### `String`
 Applicable methods:
- * required
- * len
- * min
- * max
- * regexp
- * oneOf
- * fn
+
+* required
+* len
+* min
+* max
+* regexp
+* oneOf
+* fn
  
 #### `Number`
 Applicable methods:
- * required
- * min
- * max
- * oneOf
- * fn
+
+* required
+* min
+* max
+* oneOf
+* fn
 
 #### `Boolean`
 Applicable methods:
- * required
- * fn
+
+* required
+* fn
 
 #### `Function`
 Applicable methods:
- * required
- * fn
+
+* required
+* fn
 
 #### `Object`
 Applicable methods:
- * required
- * fn
+
+* required
+* fn
  
 #### `Array`
 Applicable methods:
- * required
- * len
- * min
- * max
- * oneOf
- * typeOf
- * fn
+
+* required
+* len
+* min
+* max
+* oneOf
+* typeOf
+* fn
  
 ## SchemaType Methods
 
