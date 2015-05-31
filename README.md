@@ -161,6 +161,10 @@ Accepts `Array(String)`.
 Checks if all dependencies are met. 
 Accepts `Object(propertyPath: [String])`
 
+#### `$cast`
+Casts number to string or string to number.
+```{$cast: { age: Number }}```
+
 ## Available SchemaTypes
 
 #### `String`

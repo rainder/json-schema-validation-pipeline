@@ -32,7 +32,7 @@ describe('$schema', function () {
       s: Number,
       b: Array,
     });
-
+    
     expect(result.success).not.to.be.ok;
     expect(result.errors.length).to.be.equal(7);
   });

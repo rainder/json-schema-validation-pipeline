@@ -1,6 +1,6 @@
 {
   "name": "json-schema-validation-pipeline",
-  "version": "0.3.0",
+  "version": "0.3.4",
   "description": "Advanced JSON Schema Validator",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,6 @@
     "advanced"
   ],
   "devDependencies": {
-    "blanket": "^1.1.7",
     "chai": "^1.10.0",
     "mocha": "^2.0.1"
   },
