@@ -144,37 +144,10 @@ ValidationPipeline([
 Checks object for property types and values. 
 Accepts `Object(propertyPath: SchemaType)`. By default all `SchemaTypes` are optional unless `.required()` is called.
 
-#### `$strict`
-Turns `$schema` validation strict mode on: removes all properties form an object that are not defined in the `$schema`.
-Accepts `Boolean` or options `Object(enabled: Boolean, level: Number)`. Level parameter specifies how deep Object should be traversed.
-By default `$strict` mode is disabled.
+#### `$trimKeys`
+Array key intersection. Removes keys from the object which are missing in the array.
 
-#### Advanced example
-```js
-var o = {
-  l1: {
-    l2: {
-      a: {},
-      b: {},
-      c: {}
-    },
-    k2: {}
-  },
-  u2: 7
-};
-ValidationPipeline([
-  {$strict: {enabled: true, level: 2}},
-  {$schema: {
-    l1: Object,
-    'l1.l2': Object
-  }}
-])(o);
-
-//`o.u2` and `o.l1.k2` are removed, but `a`, `b`, `c` in `o.l1.l2` are kept
-expect(o).keys('l1');
-expect(o.l1).keys('l2');
-expect(o.l1.l2).keys(['a', 'b', 'c']);
-```
+```{$trimKeys: ['first_name', 'last_name']}```
 
 #### `$or`
 Checks if one and only one property is defined in the object. 
@@ -303,7 +276,7 @@ var objectToValidate = {
 ValidationPipeline([
   {$schema: {
     values: Function.fn(function (value) {
-      return value[0] === 1 ? undefined : 'firs element is not 1!';
+      this.errors.push('firs element is not 1!');
     })
   }}
 ])(objectToValidate);

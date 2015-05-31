@@ -1,3 +1,9 @@
+# 0.3.0 / 2015-05-31
+
+* redesign
+* removed $strict
+* added $trimKeys
+
 # 0.2.2 / 2014-11-15
 
 * added level support for `$strict` method
