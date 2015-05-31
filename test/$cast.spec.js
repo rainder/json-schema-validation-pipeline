@@ -58,4 +58,29 @@ describe('$cast', function () {
     expect(o.b.c).to.be.a('Number');
   });
 
+  it('should all succeed', function () {
+    let ctx = context();
+
+    expect($cast.call(ctx, { a: '5' }, {
+      'a': String
+    }).success).to.be.equal(true);
+
+    expect($cast.call(ctx, { a: 5 }, {
+      'a': Number
+    }).success).to.be.equal(true);
+
+  });
+
+  it('should all fail', function () {
+    let ctx = context();
+
+    expect($cast.call(ctx, { a: 5 }, {
+      'a': Array
+    }).success).to.be.equal(false);
+
+    expect($cast.call(ctx, { a: {} }, {
+      'a': Number
+    }).success).to.be.equal(false);
+  });
+
 });
