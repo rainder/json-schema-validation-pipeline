@@ -1,6 +1,6 @@
 {
   "name": "json-schema-validation-pipeline",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Advanced JSON Schema Validator",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "repository": "https://github.com/rainder/json-schema-validation-pipeline",
   "dependencies": {
-    "global-validation": "^0.1.0",
+    "global-validation": "^0.1.1",
     "lodash": "^2.4.1",
     "object-deep": "0.0.5",
     "object-path": "^0.6.0"

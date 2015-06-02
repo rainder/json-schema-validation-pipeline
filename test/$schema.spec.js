@@ -32,9 +32,9 @@ describe('$schema', function () {
       s: Number,
       b: Array,
     });
-    
+
     expect(result.success).not.to.be.ok;
-    expect(result.errors.length).to.be.equal(7);
+    expect(result.errors.length).to.be.equal(4);
   });
 
   it('should pass fn check ', function () {
@@ -99,6 +99,17 @@ describe('$schema', function () {
     });
 
     expect(result.success).not.to.be.ok;
+  });
+
+  it('should not create an error', function () {
+    let ctx = context();
+    let o = {};
+
+    let result = $schema.call(ctx, o, {
+      a: String.regexp(/\d+/)
+    });
+
+    expect(result.success).to.be.ok;
   });
 
 });
