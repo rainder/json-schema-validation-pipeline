@@ -23,7 +23,7 @@
   },
   "repository": "https://github.com/rainder/json-schema-validation-pipeline",
   "dependencies": {
-    "global-validation": "^0.1.1",
+    "global-validation": "^0.1.2",
     "lodash": "^2.4.1",
     "object-deep": "0.0.5",
     "object-path": "^0.6.0"
