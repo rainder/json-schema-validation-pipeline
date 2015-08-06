@@ -2,9 +2,6 @@
 
 Makes your life easier!
 
-## Confession
-This package modifies global `String`, `Object`, `Array`, `Function`, `Number` and `Boolean` constructor properties. I feel bad about it. Really.
-
 ## Installation
 ```bash
 $ npm install json-schema-validation-pipeline
@@ -13,8 +10,10 @@ $ npm install json-schema-validation-pipeline
 ## Usage
 ```js
 var ValidationPipeline = require('json-schema-validation-pipeline');
+var V = ValidationPipeline.V;
 
 var validate = ValidationPipeline(pipeline);
+
 
 var result = validate(object);
 
@@ -27,6 +26,7 @@ result.errors;
 
 ```js
 var ValidationPipeline = require('json-schema-validation-pipeline');
+var V = ValidationPipeline.V;
 
 var objectToValidate = {
   id: 1,
@@ -47,19 +47,19 @@ var validate = ValidationPipeline([
 
   //property value check
   {$schema: {
-    'id': Number.required().min(1),
-    'name': String.required().min(3),
-    'surname': String.required(),
-    'age': Number,
-    'birthday': String,
-    'role': String.oneOf(['Developer', 'Musician']),
-    'email': Function.required().fn(function (value) {
+    'id': V(Number).required().min(1),
+    'name': V(String).required().min(3),
+    'surname': V(String).required(),
+    'age': V(Number),
+    'birthday': V(String),
+    'role': V(String).oneOf(['Developer', 'Musician']),
+    'email': V(Function).required().fn(function (value) {
       return value === 'andrius@skerla.com'? undefined : 'This email is not mine';
     }),
-    'address': Object,
-    'address.country': String,
-    'address.city': String,
-    'address.post': String.regexp(/^[^\W]+ [^\W]+$/i)
+    'address': V(Object),
+    'address.country': V(String),
+    'address.city': V(String),
+    'address.post': V(String).regexp(/^[^\W]+ [^\W]+$/i)
   }},
 
   //Either age or birthday must be provided
@@ -85,18 +85,18 @@ console.log(validationResult.errors); // [ '`address.post` depends on `address.c
 ```js
 var validate = ValidationPipeline([
   {$schema: {
-    o: Object.required().fn(function (object, keyPath) {
+    o: V(Object).required().fn(function (object, keyPath) {
       //apply another pipeline for this object!
       return this.$schema(object, {
-        a: Array.required().fn(arrayCheck),
-        b: Array.required().typeOf(String).fn(arrayCheck)
+        a: V(Array).required().fn(arrayCheck),
+        b: V(Array).required().typeOf(String).fn(arrayCheck)
       });
 
       function arrayCheck(array, keyPath) {
         //keyPath will be 'o.a' or 'o.b' here
 
         if (~array.indexOf('Skerla')) {
-          this.errors.push('Well, array at path `' + keyPath + '` cannot contain string "Skerla".');
+          this.errors.push({'error': 'Well, array at path `' + keyPath + '` cannot contain string "Skerla".'});
         }
       }
     })
@@ -111,7 +111,7 @@ var result = validate({
 });
 
 // result.isValid === false
-// result.errors === [ 'Well, array at path `o.b` cannot contain string "Skerla".' ]
+// result.errors === [ {'o.b': 'Well, array at path `o.b` cannot contain string "Skerla".'} ]
 ```
 
 ## Interface
@@ -122,14 +122,14 @@ Package exports `Function` which accepts one argument validation pipeline `Array
 
 ```js
 ValidationPipeline({
-	name: String
+	name: V(String)
 });
 
 //equals to
 
 ValidationPipeline([
 	{$schema: {
-		name: String
+		name: V(String)
 	}}
 ]);
 
@@ -224,7 +224,7 @@ Specifies that property is required in the JSON object
 
 var result = ValidationPipeline([
   {$schema: {
-    name: String.required();
+    name: V(String).required();
   }}
 ])({
   name: 'Andrius',
@@ -238,7 +238,7 @@ Specifies min value of `Number` or min length of the `String` or min length of a
 ```js
 var result = ValidationPipeline([
   {$schema: {
-    bid: Number.min(10)
+    bid: V(Number).min(10)
   }}
 ])({
   bid: 10,
@@ -261,8 +261,8 @@ Specifies possible values for the property
 ```js
 ValidationPipeline([
   {$schema: {
-    vegetable: String.oneOf(['tomato', 'salad']),
-    fruits: Array.oneOf(['apple', 'orange'])
+    vegetable: V(String).oneOf(['tomato', 'salad']),
+    fruits: V(Array).oneOf(['apple', 'orange'])
   }}
 ])({
   vegetable: 'tomato',
@@ -279,8 +279,8 @@ var objectToValidate = {
 
 ValidationPipeline([
   {$schema: {
-    values: Function.fn(function (value) {
-      this.errors.push('firs element is not 1!');
+    values: V(Function).fn(function (value) {
+      this.errors.push({'a':'firs element is not 1!'});
     })
   }}
 ])(objectToValidate);
@@ -295,11 +295,11 @@ var objectToValidate = {
 
 var result = ValidationPipeline([
   {$schema: {
-    values: Array.typeOf(Number.min(1))
+    values: V(Array).typeOf(Number.min(1))
   }}
 ])(objectToValidate);
 
-// result.errors == [ '`value.3` must be a number' ]
+// result.errors == [ {'value.3': 'must be a number'} ]
 ```
 
 

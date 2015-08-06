@@ -1,7 +1,10 @@
 const _ = require('lodash');
 const context = require('./lib/context');
+const V = require('./lib/validation');
 
-module.exports = jsonSchemaValidationPipeline;
+module.exports = exports = jsonSchemaValidationPipeline;
+
+exports.V = V;
 
 /**
  *
@@ -9,7 +12,7 @@ module.exports = jsonSchemaValidationPipeline;
  * @returns {function(this:null)}
  */
 function jsonSchemaValidationPipeline(pipeline) {
-  return executePipeline.bind(null, pipeline);
+  return _.bind(executePipeline, null, pipeline);
 }
 
 /**

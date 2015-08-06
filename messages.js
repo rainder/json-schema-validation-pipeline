@@ -2,34 +2,34 @@
 
 module.exports = exports = {};
 
-exports.$dependency = 'Missing dependency: Key `%key` requires `%dependency`';
+exports.$dependency = 'Missing dependency: `%dependency`';
 exports.$or = 'One of the following properties must be declared: %keys';
 exports.$and = 'All of the following properties must be declared: %keys';
-exports.$cast = 'Failed to cast `%keyPath` to %type';
+exports.$cast = 'Failed to cast to %type';
 
-exports.required = 'Property `%keyPath` is required';
-exports.type = 'Expected `%keyPath` to be type of %type';
-exports.fn = 'Validation of `%keyPath` failed';
+exports.required = 'Required';
+exports.type = 'Expected to be type of %type';
+exports.fn = 'Validation failed';
 
 exports.Number = {
-  min: 'Expected `%keyPath` >= %expected. Got: %actual',
-  max: 'Expected `%keyPath` <= %expected. Got: %actual',
-  between: 'Expected `%keyPath` to be between %expected. Got: %actual',
-  oneOf: 'The value of number `%keyPath` can be one of %expected. Got: %actual'
+  min: 'Expected to be more or equal to %expected. Got: %actual',
+  max: 'Expected to be less or equal to %expected. Got: %actual',
+  between: 'Expected to be between %expected. Got: %actual',
+  oneOf: 'Expected to be one of %expected. Got: %actual'
 };
 
 exports.String = {
-  min: 'The length of string `%keyPath` should be greater than %expected. Got: %actual',
-  max: 'The length of string `%keyPath` should be lower than %expected. Got: %actual',
-  len: 'The length of string `%keyPath` should be exactly %expected. Got: %actual',
-  oneOf: 'The value of string `%keyPath` can be one of %expected. Got: %actual',
-  regexp: 'The value of string `%keyPath` does not match regexp %expected'
+  min: 'The length of the string should be greater or equal to %expected. Got: %actualLength',
+  max: 'The length of the string should be lower or equal to %expected. Got: %actualLength',
+  len: 'The length of the string should be exactly %expected. Got: %actualLength',
+  oneOf: 'The value of the string can be one of %expected. Got: %actual',
+  regexp: 'The value of the string does not match regexp %expected'
 };
 
 exports.Array = {
-  min: 'The length of an array `%keyPath` should be greater than %expected. Got: %actual',
-  max: 'The length of an array `%keyPath` should be lower than %expected. Got: %actual',
-  len: 'The length of an array `%keyPath` should be exactly %expected. Got: %actual',
-  oneOf: 'The value of an array `%keyPath` can be one of %expected. Got: %actual',
-  typeOf: 'The type of the value of `%keyPath` can be only %expectedType. Got: %actualType'
+  min: 'The length of an array should be greater or equal to %expected. Got: %actualLength',
+  max: 'The length of an array should be lower or equal to %expected. Got: %actualLength',
+  len: 'The length of an array should be exactly %expected. Got: %actualLength',
+  oneOf: 'The value of an array can be one of %expected. Got: %actual',
+  typeOf: 'The type of the value of can be only %expectedType. Got: %actualType'
 };

@@ -1,6 +1,5 @@
 "use strict";
 
-require('global-validation');
 var _ = require('lodash');
 var chai = require('chai');
 var $or = require('./../lib/pipeline-methods/$or');

@@ -1,6 +1,5 @@
 "use strict";
 
-require('global-validation');
 var _ = require('lodash');
 var chai = require('chai');
 var $dependency = require('./../lib/pipeline-methods/$dependency');
