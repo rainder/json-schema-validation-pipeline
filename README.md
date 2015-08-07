@@ -78,7 +78,7 @@ var validate = ValidationPipeline([
 
 var validationResult = validate(objectToValidate);
 console.log(validationResult.isValid); // false
-console.log(validationResult.errors); // [ '`address.post` depends on `address.city` field.' ]
+console.log(validationResult.errors);
 ```
 
 ## Advanced Example
@@ -96,7 +96,7 @@ var validate = ValidationPipeline([
         //keyPath will be 'o.a' or 'o.b' here
 
         if (~array.indexOf('Skerla')) {
-          this.errors.push({'error': 'Well, array at path `' + keyPath + '` cannot contain string "Skerla".'});
+          this.errors['error'] = 'Well, array at path `' + keyPath + '` cannot contain string "Skerla".';
         }
       }
     })
@@ -111,7 +111,7 @@ var result = validate({
 });
 
 // result.isValid === false
-// result.errors === [ {'o.b': 'Well, array at path `o.b` cannot contain string "Skerla".'} ]
+// result.errors['o.b'] = 'Well, array at path `o.b` cannot contain string "Skerla".';
 ```
 
 ## Interface
@@ -135,7 +135,7 @@ ValidationPipeline([
 
 ```
 
-`ValidationFunction` accepts one argument which must be target object for validation. Returns `object(errors: [], isValid: Boolean)`.
+`ValidationFunction` accepts one argument which must be target object for validation. Returns `object(errors: {}, isValid: Boolean)`.
 
 
 ## Available pipeline methods
@@ -280,7 +280,7 @@ var objectToValidate = {
 ValidationPipeline([
   {$schema: {
     values: V(Function).fn(function (value) {
-      this.errors.push({'a':'firs element is not 1!'});
+      this.errors['a'] = 'firs element is not 1!';
     })
   }}
 ])(objectToValidate);
@@ -299,7 +299,7 @@ var result = ValidationPipeline([
   }}
 ])(objectToValidate);
 
-// result.errors == [ {'value.3': 'must be a number'} ]
+// result.errors['value.3'] = 'must be a number';
 ```
 
 

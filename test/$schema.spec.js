@@ -21,7 +21,7 @@ describe('$schema', function () {
       c: V(Number)
     });
 
-    expect(result.success).to.be.ok;
+    expect(result.isValid).to.be.ok;
   });
 
   it('should fail simple object check', function () {
@@ -33,8 +33,8 @@ describe('$schema', function () {
       b: V(Array),
     });
 
-    expect(result.success).not.to.be.ok;
-    expect(result.errors.length).to.be.equal(4);
+    expect(result.isValid).not.to.be.ok;
+    expect(Object.keys(result.errors).length).to.be.equal(4);
   });
 
   it('should pass fn check ', function () {
@@ -45,7 +45,7 @@ describe('$schema', function () {
       })
     });
 
-    expect(result.success).to.be.ok;
+    expect(result.isValid).to.be.ok;
   });
 
   it('should fail fn check ', function () {
@@ -56,7 +56,7 @@ describe('$schema', function () {
       })
     });
 
-    expect(result.success).not.to.be.ok;
+    expect(result.isValid).not.to.be.ok;
   });
 
   it('should pass fn advanced check ', function () {
@@ -77,7 +77,7 @@ describe('$schema', function () {
       'o.a': V(Number)
     });
     
-    expect(result.success).to.be.ok;
+    expect(result.isValid).to.be.ok;
   });
 
   it('should fail fn advanced check ', function () {
@@ -98,7 +98,7 @@ describe('$schema', function () {
       'o.a': V(String)
     });
 
-    expect(result.success).not.to.be.ok;
+    expect(result.isValid).not.to.be.ok;
   });
 
   it('should not create an error', function () {
@@ -109,7 +109,7 @@ describe('$schema', function () {
       a: V(String).regexp(/\d+/)
     });
 
-    expect(result.success).to.be.ok;
+    expect(result.isValid).to.be.ok;
   });
 
   it('should not create an error', function () {
@@ -122,7 +122,7 @@ describe('$schema', function () {
       })
     });
 
-    expect(result.success).to.be.ok;
+    expect(result.isValid).to.be.ok;
   });
 
 });

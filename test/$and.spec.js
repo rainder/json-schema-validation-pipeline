@@ -19,8 +19,6 @@ describe('$and', function () {
     result = $and.call(ctx, o, [
       'a', 'b'
     ]);
-
-    expect(result.success).to.be.equal(true);
     expect(result.isValid).to.be.equal(true);
   });
 
@@ -36,7 +34,7 @@ describe('$and', function () {
       'd', 'a'
     ]);
 
-    expect(result.success).to.be.equal(false);
+    expect(result.isValid).to.be.equal(false);
   });
 
 });

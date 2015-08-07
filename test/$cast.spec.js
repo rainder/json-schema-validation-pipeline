@@ -20,7 +20,6 @@ describe('$cast', function () {
       'a': String
     });
 
-    expect(result.success).to.be.equal(true);
     expect(result.isValid).to.be.equal(true);
     expect(o.a).to.be.a('String');
   });
@@ -37,7 +36,7 @@ describe('$cast', function () {
       'a': String
     });
 
-    expect(result.success).to.be.equal(false);
+    expect(result.isValid).to.be.equal(false);
     expect(o.a).to.be.an('Object');
   });
 
@@ -54,7 +53,7 @@ describe('$cast', function () {
       'b.c': Number
     });
 
-    expect(result.success).to.be.equal(true);
+    expect(result.isValid).to.be.equal(true);
     expect(o.b.c).to.be.a('Number');
   });
 
@@ -63,11 +62,11 @@ describe('$cast', function () {
 
     expect($cast.call(ctx, { a: '5' }, {
       'a': String
-    }).success).to.be.equal(true);
+    }).isValid).to.be.equal(true);
 
     expect($cast.call(ctx, { a: 5 }, {
       'a': Number
-    }).success).to.be.equal(true);
+    }).isValid).to.be.equal(true);
 
   });
 
@@ -76,11 +75,11 @@ describe('$cast', function () {
 
     expect($cast.call(ctx, { a: 5 }, {
       'a': Array
-    }).success).to.be.equal(false);
+    }).isValid).to.be.equal(false);
 
     expect($cast.call(ctx, { a: {} }, {
       'a': Number
-    }).success).to.be.equal(false);
+    }).isValid).to.be.equal(false);
   });
 
 });

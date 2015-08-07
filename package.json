@@ -1,6 +1,6 @@
 {
   "name": "json-schema-validation-pipeline",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Advanced JSON Schema Validator",
   "main": "index.js",
   "scripts": {

@@ -20,13 +20,13 @@ describe('$or', function () {
       'a', 'c'
     ]);
 
-    expect(result.success).to.be.equal(true);
+    expect(result.isValid).to.be.equal(true);
 
     result = $or.call(ctx, o, [
       'b', 'c'
     ]);
 
-    expect(result.success).to.be.equal(true);
+    expect(result.isValid).to.be.equal(true);
   });
 
   it('should fail object check ', function () {
@@ -41,7 +41,7 @@ describe('$or', function () {
       'd', 'c'
     ]);
 
-    expect(result.success).to.be.equal(false);
+    expect(result.isValid).to.be.equal(false);
   });
 
 });

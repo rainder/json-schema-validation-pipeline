@@ -20,17 +20,17 @@ describe('$dependency', function () {
     result = $dependency.call(ctx, o, {
       'a': 'b'
     });
-    expect(result.success).to.be.equal(true);
+    expect(result.isValid).to.be.equal(true);
 
     result = $dependency.call(ctx, o, {
       'a': ['b', 'c']
     });
-    expect(result.success).to.be.equal(true);
+    expect(result.isValid).to.be.equal(true);
 
     result = $dependency.call(ctx, o, {
       'd': ['b', 'e']
     });
-    expect(result.success).to.be.equal(true);
+    expect(result.isValid).to.be.equal(true);
   });
 
   it('should fail object check ', function () {
@@ -44,7 +44,7 @@ describe('$dependency', function () {
     result = $dependency.call(ctx, o, {
       a: 'c'
     });
-    expect(result.success).to.be.equal(false);
+    expect(result.isValid).to.be.equal(false);
   });
 
 });
