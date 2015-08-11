@@ -144,10 +144,15 @@ ValidationPipeline([
 Checks object for property types and values. 
 Accepts `Object(propertyPath: SchemaType)`. By default all `SchemaTypes` are optional unless `.required()` is called.
 
-#### `$trimKeys`
+#### `$take`
 Array key intersection. Removes keys from the object which are missing in the array.
 
-```{$trimKeys: ['first_name', 'last_name']}```
+```{$take: ['first_name', 'last_name']}```
+
+#### `$trim`
+Invokes `.trim()` on every specified property
+
+```{$trim: ['name.first', 'last_name']}```
 
 #### `$or`
 Checks if one and only one property is defined in the object. 
