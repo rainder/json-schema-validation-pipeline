@@ -1,32 +1,22 @@
-const _ = require('lodash');
-const context = require('./lib/context');
+'use strict';
 
-module.exports = jsonSchemaValidationPipeline;
-
-/**
- *
- * @param pipeline
- * @returns {function(this:null)}
- */
-function jsonSchemaValidationPipeline(pipeline) {
-  return executePipeline.bind(null, pipeline);
-}
+//const Validation = require('./lib/validation');
+const Rule = require('./lib/rule');
+const Schema = require('./lib/schema');
 
 /**
  *
- * @param pipeline
- * @param objectToValidate
- * @returns {*}
+ * @param mixed
  */
-function executePipeline(pipeline, objectToValidate) {
-  var ctx = context();
-
-  _.each(pipeline, function (pipelineItem) {
-    _.each(pipelineItem, function (pipelineSpecs, pipelineMethod) {
-      ctx[pipelineMethod].call(ctx, objectToValidate, pipelineSpecs);
-    });
-  });
-
-  return ctx;
+module.exports = function (type) {
+  return new Rule(type);
 };
 
+//module.exports.Pipeline = function (pipeline) {
+//  return new Validation(pipeline);
+//};
+
+
+module.exports.Schema = function (schema) {
+  return new Schema(schema);
+};
