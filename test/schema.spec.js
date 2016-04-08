@@ -157,5 +157,69 @@ describe('Schema', function () {
       schema.validate({ a: { b: { c: '' } } }).getErrors()[0].path.should.equals('a.b.c');
     });
   });
+  describe('Array', function () {
+    it('should validate an array', function () {
+      const schema = new V.Schema({
+        a: V(Array)
+      });
+
+      schema.validate({}).isValid().should.equals(true);
+      schema.validate({ a: [] }).isValid().should.equals(true);
+      schema.validate({ a: {} }).isValid().should.equals(false);
+    });
+    it('should validate min', function () {
+      const schema = new V.Schema({
+        a: V(Array).min(1)
+      });
+
+      schema.validate({ a: [1] }).isValid().should.equals(true);
+      schema.validate({ a: [1, 2] }).isValid().should.equals(true);
+      schema.validate({ a: [] }).isValid().should.equals(false);
+    });
+    it('should validate max', function () {
+      const schema = new V.Schema({
+        a: V(Array).max(2)
+      });
+
+      schema.validate({ a: [] }).isValid().should.equals(true);
+      schema.validate({ a: [1] }).isValid().should.equals(true);
+      schema.validate({ a: [1, 2] }).isValid().should.equals(true);
+      schema.validate({ a: [1, 2, 3] }).isValid().should.equals(false);
+    });
+    it('should validate oneOf', function () {
+      const schema = new V.Schema({
+        a: V(Array).oneOf([1, 2])
+      });
+
+      schema.validate({ a: [] }).isValid().should.equals(true);
+      schema.validate({ a: [1] }).isValid().should.equals(true);
+      schema.validate({ a: [1, 2] }).isValid().should.equals(true);
+      schema.validate({ a: [1, 2, 3] }).isValid().should.equals(false);
+      schema.validate({ a: [3] }).isValid().should.equals(false);
+    });
+    it('should validate typeOf', function () {
+      const schema = new V.Schema({
+        a: V(Array).typeOf(String)
+      });
+
+      schema.validate({ a: [] }).isValid().should.equals(true);
+      schema.validate({ a: ['a'] }).isValid().should.equals(true);
+      schema.validate({ a: ['a', 'b'] }).isValid().should.equals(true);
+      schema.validate({ a: ['a', 'b', 4] }).isValid().should.equals(false);
+    });
+    it('should validate schema', function () {
+      const schema = new V.Schema({
+        a: V(Array).schema({
+          b: V(String).required()
+        })
+      });
+
+      schema.validate({ a: [] }).isValid().should.equals(true);
+      schema.validate({ a: [{ b: 'asd' }] }).isValid().should.equals(true);
+      schema.validate({ a: [{}] }).isValid().should.equals(false);
+      schema.validate({ a: [{ b: '123' }, { b: '234' }] }).isValid().should.equals(true);
+      schema.validate({ a: [{ b: '123' }, { b: '234' }, {}] }).isValid().should.equals(false);
+    });
+  })
 
 });
