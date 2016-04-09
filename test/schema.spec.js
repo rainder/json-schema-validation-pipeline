@@ -24,6 +24,20 @@ describe('Schema', function () {
     schema.validate({}).isValid().should.equals(false);
   });
 
+  it('should validate null', function () {
+    const schema = new V.Schema({
+      a: V(Object).null().required()
+    });
+
+    schema.validate({ a: null }).isValid().should.equals(true);
+    schema.validate({ a: {} }).isValid().should.equals(true);
+    schema.validate({ a: 'string' }).isValid().should.equals(false);
+    schema.validate({}).isValid().should.equals(false);
+
+    schema.validate({ a: 'string' }).getErrors()[0].message.should.match(/or null/);
+  });
+
+
   describe('String', function () {
     it('should validate type', function () {
       const schema = new V.Schema({
@@ -76,6 +90,16 @@ describe('Schema', function () {
       schema.validate({ a: '123' }).isValid().should.equals(true);
       schema.validate({ a: '1a3' }).isValid().should.equals(false);
       schema.validate({ a: 'asd' }).isValid().should.equals(false);
+    });
+
+    it('should validate len', function () {
+      const schema = new V.Schema({
+        a: V(String).len(5)
+      });
+
+      schema.validate({ a: '12345' }).isValid().should.equals(true);
+      schema.validate({ a: '1234' }).isValid().should.equals(false);
+      schema.validate({ a: '123456' }).isValid().should.equals(false);
     });
   })
   describe('Number', function () {
