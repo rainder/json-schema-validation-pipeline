@@ -1,6 +1,8 @@
 # Advanced JSON Schema Validator
 
-Makes your life easier!
+## DEPRECATED 
+
+in favour of https://github.com/rainder/node-skerla-json-schema
 
 ## Installation
 ```bash
