@@ -17,6 +17,4 @@ module.exports = function (type) {
 //};
 
 
-module.exports.Schema = function (schema) {
-  return new Schema(schema);
-};
+module.exports.Schema = Schema;

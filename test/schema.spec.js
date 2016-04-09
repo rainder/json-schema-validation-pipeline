@@ -6,7 +6,7 @@ const V = require('../');
 chai.should();
 
 describe('Schema', function () {
-  it('should validate not required', function *() {
+  it('should validate not required', function () {
     const schema = new V.Schema({
       a: V(String)
     });
@@ -15,7 +15,7 @@ describe('Schema', function () {
     schema.validate({}).isValid().should.equals(true);
   });
 
-  it('should validate required', function *() {
+  it('should validate required', function () {
     const schema = new V.Schema({
       a: V(String).required()
     });
@@ -34,9 +34,8 @@ describe('Schema', function () {
     schema.validate({ a: 'string' }).isValid().should.equals(false);
     schema.validate({}).isValid().should.equals(false);
 
-    schema.validate({ a: 'string' }).getErrors()[0].message.should.match(/or null/);
+    schema.validate({ a: 'string' }).getErrors()[0].message.should.match(/or Null/);
   });
-
 
   describe('String', function () {
     it('should validate type', function () {
@@ -244,6 +243,121 @@ describe('Schema', function () {
       schema.validate({ a: [{ b: '123' }, { b: '234' }] }).isValid().should.equals(true);
       schema.validate({ a: [{ b: '123' }, { b: '234' }, {}] }).isValid().should.equals(false);
     });
+  });
+
+
+  describe('strict', function () {
+    it('should remove unwanted keys', function () {
+      const schema = new V.Schema({
+        a: V(String)
+      }, { strict: true });
+
+      schema.validate({
+        a: 'asd',
+        b: '23'
+      }).getClean().should.deep.equals({
+        a: 'asd'
+      });
+    });
+
+    it('should remove unwanted child keys', function () {
+      const schema = new V.Schema({
+        o: {
+          a: V(String)
+        }
+      }, { strict: true });
+
+      schema.validate({
+        o: {
+          a: 'asd',
+          b: '23'
+        }
+      }).getClean().should.deep.equals({
+        o: {
+          a: 'asd'
+        }
+      });
+    });
+
+    it('should remove unwanted childx2 keys', function () {
+      const schema = new V.Schema({
+        o: {
+          o: {
+            a: V(String)
+          }
+        }
+      }, { strict: true });
+
+      schema.validate({
+        o: {
+          o: {
+            a: 'asd',
+            b: '23'
+          }
+        }
+      }).getClean().should.deep.equals({
+        o: {
+          o: {
+            a: 'asd'
+          }
+        }
+      });
+    });
+
+    it('should remove unwanted childx2 keys in sub-schema definitions', function () {
+      const schema = new V.Schema({
+        o: V(Object).schema({
+          a: V(String)
+        })
+      }, { strict: true });
+
+      schema.validate({
+        o: {
+          a: 'asd',
+          b: '23'
+        }
+      }).getClean().should.deep.equals({
+        o: { a: 'asd' }
+      });
+    });
+
+    it('should remove unwanted childx2 keys in sub-schemax2 definitions', function () {
+      const schema = new V.Schema({
+        o: V(Object).schema({
+          o: {
+            o: V(Object).schema({
+              o: {
+                a: V(String)
+              }
+            })
+          }
+        })
+      }, { strict: true });
+
+      schema.validate({
+        o: {
+          o: {
+            o: {
+              o: {
+                a: 'asd',
+                b: '23'
+              }
+            }
+          }
+        }
+      }).getClean().should.deep.equals({
+        o: {
+          o: {
+            o: {
+              o: {
+                a: 'asd'
+              }
+            }
+          }
+        }
+      });
+    });
+
   })
 
 });
